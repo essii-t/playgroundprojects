@@ -1,1 +1,1 @@
-# claudeprojects
+# playgroundprojects
