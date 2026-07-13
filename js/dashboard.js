@@ -118,11 +118,14 @@
     `;
 
     renderChart();
-    document.getElementById('alloc-donut').innerHTML = renderDonutChart({
-      segments: data.allocation.map((a) => ({ value: a.value, color: a.color })),
+    const allocDonutEl = document.getElementById('alloc-donut');
+    const allocDonut = renderDonutChart({
+      segments: data.allocation.map((a) => ({ label: a.label, value: a.value, color: a.color })),
       centerLabel: 'Total',
       centerValue: formatK(nw.total),
     });
+    allocDonutEl.innerHTML = allocDonut.html;
+    allocDonut.init(allocDonutEl);
 
     document.querySelectorAll('#range-toggle .chip').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -140,9 +143,12 @@
     const pct = (((last - first) / first) * 100).toFixed(1);
     const rangeLabel = { '3M': '3 months', '6M': '6 months', '1Y': '1 year', ALL: 'all time' }[currentRange];
     document.getElementById('trend-sub').innerHTML = `<strong>${pct > 0 ? '+' : ''}${pct}%</strong> over ${rangeLabel}`;
-    document.getElementById('nw-chart').innerHTML = renderLineChart({ series, color: '#10b981' });
+    const chartEl = document.getElementById('nw-chart');
+    const chart = renderLineChart({ series, color: '#10b981' });
+    chartEl.innerHTML = chart.html;
+    chart.init(chartEl);
     const labels = pickXLabels(series);
-    document.getElementById('nw-chart').insertAdjacentHTML('beforeend', `<div class="chart-x-labels">${labels.map((l) => `<span>${l}</span>`).join('')}</div>`);
+    chartEl.insertAdjacentHTML('beforeend', `<div class="chart-x-labels">${labels.map((l) => `<span>${l}</span>`).join('')}</div>`);
   }
 
   renderShell('dashboard');

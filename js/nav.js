@@ -65,7 +65,6 @@ function renderShell(activeKey) {
           <a class="sidebar-link ${item.key === activeKey ? 'active' : ''}" href="${item.href}">
             ${icon(item.icon)}
             <span>${item.label}</span>
-            <span class="indicator"></span>
           </a>`).join('')}
       </div>
       <div class="sidebar-security">

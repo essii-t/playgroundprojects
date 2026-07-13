@@ -98,12 +98,15 @@
 
     renderHoldingsBody();
     renderChart();
-    document.getElementById('alloc-donut').innerHTML = renderDonutChart({
-      segments: p.allocation.map((a) => ({ value: a.pct, color: a.color })),
+    const allocDonutEl = document.getElementById('alloc-donut');
+    const allocDonut = renderDonutChart({
+      segments: p.allocation.map((a) => ({ label: a.label, value: a.pct, tooltipValue: Math.round((a.pct / 100) * p.value), color: a.color })),
       centerLabel: 'Classes',
       centerValue: p.allocation.length,
       size: 170,
     });
+    allocDonutEl.innerHTML = allocDonut.html;
+    allocDonut.init(allocDonutEl);
 
     document.querySelectorAll('#range-toggle .chip').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -182,7 +185,9 @@
     const rangeLabel = { '1M': '1 month', '3M': '3 months', '1Y': '1 year', ALL: 'all time' }[currentRange];
     document.getElementById('trend-sub').innerHTML = `<span class="${pct >= 0 ? 'pos' : 'neg'}" style="font-weight:600;">${formatCurrency(data.portfolio.todayChange)} today</span> &nbsp; <span class="${pct >= 0 ? 'pos' : 'neg'}">${pct > 0 ? '+' : ''}${pct}%</span> ${rangeLabel}`;
     const chartEl = document.getElementById('pf-chart');
-    chartEl.innerHTML = renderLineChart({ series, color: '#10b981', height: 220 });
+    const chart = renderLineChart({ series, color: '#10b981', height: 220 });
+    chartEl.innerHTML = chart.html;
+    chart.init(chartEl);
     const labels = pickXLabels(series);
     chartEl.insertAdjacentHTML('beforeend', `<div class="chart-x-labels">${labels.map((l) => `<span>${l}</span>`).join('')}</div>`);
   }

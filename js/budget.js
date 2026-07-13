@@ -113,12 +113,15 @@
   }
 
   function renderSpendDonut(month, totalSpent) {
-    document.getElementById('spend-donut').innerHTML = renderDonutChart({
-      segments: month.categories.map((c) => ({ value: c.spent, color: c.color })),
+    const spendDonutEl = document.getElementById('spend-donut');
+    const spendDonut = renderDonutChart({
+      segments: month.categories.map((c) => ({ label: c.name, value: c.spent, color: c.color })),
       centerLabel: 'Spent',
       centerValue: formatK(totalSpent),
       size: 170,
     });
+    spendDonutEl.innerHTML = spendDonut.html;
+    spendDonut.init(spendDonutEl);
     document.getElementById('spend-legend').innerHTML = month.categories.map((c) => `
       <div class="legend-row" style="padding:5px 0;">
         <span class="legend-label"><span class="legend-swatch" style="background:${c.color}"></span>${c.name}</span>
@@ -138,7 +141,7 @@
             <div style="font-size:12px; color:var(--text-faint);">${t.date} &middot; $${t.amount.toFixed(2)}</div>
           </div>
         </div>
-        <select class="cat-select" data-tid="${t.id}" style="border:1px solid var(--border-strong); border-radius:8px; padding:5px 8px; font-size:12.5px; font-family:inherit; color:${cat.color}; background:color-mix(in srgb, ${cat.color} 10%, white);">
+        <select class="cat-select" data-tid="${t.id}" style="border:1px solid var(--border-strong); border-radius:8px; padding:5px 8px; font-size:12.5px; font-family:inherit; color:var(--text); background:#fff;">
           ${month.categories.map((c) => `<option value="${c.key}" ${c.key === t.category ? 'selected' : ''}>${c.name}</option>`).join('')}
         </select>
       </div>`;
